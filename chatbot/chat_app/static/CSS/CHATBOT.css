@@ -1,0 +1,78 @@
+body {
+    background-color: #f0f0f0;
+  }
+
+  .card {
+    max-width: 500px;
+    margin: 50px auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    background-color: #007bff;
+    border-bottom: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 20px;
+  }
+
+  .card-header h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .card-body {
+    padding: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .message {
+    margin-bottom: 20px;
+  }
+
+  .message.bot {
+    background-color: #d4edda;
+    border-radius: 15px;
+    padding: 10px 15px;
+  }
+
+  .message.user {
+    background-color: #cce5ff;
+    border-radius: 15px;
+    padding: 10px 15px;
+    text-align: right;
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  .input-group-text {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+
+  .form-control {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .send-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+  }
+
+
+
+
+  

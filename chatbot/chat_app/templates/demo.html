@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MyBot</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f0f0f0;
+    }
+
+    .card {
+      max-width: 600px;
+      margin: 50px auto;
+      /*height: 700px;*/
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      background-color: #007bff;
+      border-bottom: none;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      padding: 20px;
+    }
+
+    .card-header h1 {
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin-bottom: 20px;
+    }
+
+    .message.bot {
+      background-color: #d4edda;
+      border-radius: 15px;
+      padding: 10px 15px;
+    }
+
+    .message.user {
+      background-color: #cce5ff;
+      border-radius: 15px;
+      padding: 10px 15px;
+      text-align: right;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group-text {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
+    }
+
+    .form-control {
+      border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
+    .send-btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 15px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-header">
+      <h1>GRO-HARVEST</h1>
+    </div>
+    <div class="card-body" id="message-section">
+      <div class="message bot"><span id="bot-response">How may I help you?</span></div>
+    </div>
+    <div class="input-group">
+      <input id="input" type="text" class="form-control" placeholder="Type a message" autocomplete="off" autofocus>
+      <button class="send-btn" onclick="sendMessage()">Send <i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- markdown-it -->
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+
+  <script>
+    function sendMessage() {
+      const inputField = document.getElementById("input");
+      let input = inputField.value.trim();
+      input != "" && output(input);
+      inputField.value = "";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const inputField = document.getElementById("input");
+      inputField.addEventListener("keydown", function (e) {
+        if (e.code === "Enter") {
+          let input = inputField.value.trim();
+          input != "" && output(input);
+          inputField.value = "";
+          addChat(input);
+        }
+      });
+    });
+
+    function output(input) {
+      const md = new markdownit({ html: true });
+
+      $.ajax({
+        type: 'POST',
+        url: '/ask_question/',
+        data: {
+          'text': input,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (res) {
+          if (res && res.data && res.data.text) {
+            var response = md.render(res.data.text);
+            addOutputChat(input, response);
+          } else {
+            console.error("Invalid response format");
+          }
+        },
+        error: function () {
+          console.log("There was an error!");
+        }
+      });
+    }
+
+    function addChat(input) {
+      const mainDiv = document.getElementById("message-section");
+      let userDiv = document.createElement("div");
+      userDiv.classList.add("message", "user");
+      userDiv.innerHTML = `<span id="user-response">${input}</span>`;
+      mainDiv.appendChild(userDiv);
+      mainDiv.scrollTop = mainDiv.scrollHeight;
+    }
+
+    function addOutputChat(input, product) {
+      const mainDiv = document.getElementById("message-section");
+      let botDiv = document.createElement("div");
+      botDiv.classList.add("message", "bot");
+      botDiv.innerHTML = `<span id="bot-response">${product}</span>`;
+      mainDiv.appendChild(botDiv);
+      mainDiv.scrollTop = mainDiv.scrollHeight;
+    }
+  </script>
+</body>
+</html>
